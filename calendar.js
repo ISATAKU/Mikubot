@@ -1,60 +1,61 @@
-/*ƒJƒŒƒ“ƒ_[‚ÌID‚ğæ“¾*/
+/*ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã®IDã‚’å–å¾—*/
 function get_Calendar() {
+  var value_1 = PropertiesService.getScriptProperties().getProperty('CALENDAR_ID_Lecture'); //Google calendar ID
   var arrCals = [];
-  arrCals.push(CalendarApp.getCalendarById('59073gjopqp3d44f6vq6plkjro@group.calendar.google.com'));
+  arrCals.push(CalendarApp.getCalendarById(value_1));
 
   return arrCals;
 }
 
-/*¡“ú‚Ì—\’è‚ğæ“¾‚·‚éƒƒCƒ“‚ÌŠÖ”*/
+/*ä»Šæ—¥ã®äºˆå®šã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚¤ãƒ³ã®é–¢æ•°*/
 function get_Today_Schedule(){
-  var arrCals = get_Calendar();//ƒJƒŒƒ“ƒ_[IDæ“¾
+  var arrCals = get_Calendar(); //ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼IDå–å¾—
   var date = new Date();
-  var strIntro = "‚¨‚Í‚æ‚¤‚²‚´‚¢‚Ü‚·B\n¡“ú‚Ì‚¤‚¦‚Í‚ç‰Æ‚Ì—\’è‚Å‚·B\n" ;
+  var strIntro = "ãŠã¯ã‚ˆã†ã”ã–ã„ã¾ã™ã€ãƒã‚¹ã‚¿ãƒ¼ åˆéŸ³ãƒŸã‚¯ã§ã™ã€‚\nä»Šæ—¥ã®ã®äºˆå®šã‚’ãŠçŸ¥ã‚‰ã›ã—ã¾ã™ã«ã‚ƒ Y(à¹‘Â° Â°à¹‘)ã€‚\n ";
   var strBody = strIntro;
-  /*ƒJƒŒƒ“ƒ_[‚Ì–{“ú‚ÌƒCƒxƒ“ƒgæ“¾*/
+
+  /*ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã®æœ¬æ—¥ã®ã‚¤ãƒ™ãƒ³ãƒˆå–å¾—*/
   for (var i = 0 ; i< arrCals.length ; i++){
     strBody = strBody + getEvents(arrCals[i],date);
   }
 
-  if (strBody == strIntro){
-    strBody = "‚¨‚Í‚æ‚¤‚²‚´‚¢‚Ü‚·B\n¡“ú‚Ì‚¤‚¦‚Í‚ç‰Æ‚Ì—\’è‚Í‚ ‚è‚Ü‚¹‚ñB\n" ;
+  if (strBody == strIntro){ //ä½•ã‚‚äºˆå®šãŒå…¥ã£ã¦ã„ãªã„å ´åˆ
+    strBody = "ãŠã¯ã‚ˆã†ã”ã–ã„ã¾ã™ã€‚ãƒã‚¹ã‚¿ãƒ¼ï¼\nãªã€ãªã‚“ã¨ï¼ï¼Ÿä»Šæ—¥ã¯ä½•ã‚‚äºˆå®šã‚ã‚Šã¾ã›ã‚“\nã‚†ã£ãã‚Šä¼‘ã‚“ã§ãã ã•ã„ã­ã€‚\n";
   }
   postSlackMessage(strBody);
 }
 
-/*ƒJƒŒƒ“ƒ_[‚ÌƒCƒxƒ“ƒgæ“¾*/
+/*ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã®ã‚¤ãƒ™ãƒ³ãƒˆå–å¾—*/
 function getEvents(Cals,getDate){
   var arrEvents = Cals.getEventsForDay(getDate);
-  var strName = Cals.getName();//ƒJƒŒƒ“ƒ_[‚Ì–¼‘Oæ“¾
   var strEvents ="";
 
   for (var i=0; i<arrEvents.length; i++){
-    var strTitle = arrEvents[i].getTitle();
-    var strStart = _HHmm(arrEvents[i].getStartTime());//ŠJn
-    var strEnd = _HHmm(arrEvents[i].getEndTime());//ŠJn
+    var strTitle = arrEvents[i].getTitle(); //ã‚¿ã‚¤ãƒˆãƒ«å
+    var strStart = _HHmm(arrEvents[i].getStartTime()); //é–‹å§‹æ™‚åˆ»
+    var strEnd = _HHmm(arrEvents[i].getEndTime()); //çµ‚äº†æ™‚åˆ»
     if (strStart == strEnd){
-      strEvents = strEvents + 'I“úƒCƒxƒ“ƒgF' + strTitle + ' (' + strName + ')' + '\n';
+      strEvents = strEvents + 'çµ‚æ—¥ã‚¤ãƒ™ãƒ³ãƒˆï¼š' + strTitle + '\n'; //çµ‚æ—¥ã®å ´åˆ
     }else{
-      strEvents = strEvents + strStart + '`' + strEnd+ 'F'  + strTitle + ' (' + strName + ')' + '\n';
+      strEvents = strEvents + strStart + 'ï½' + strEnd+ 'ï¼š'  + strTitle + '\n'; //æ™®é€šã®äºˆå®š
     }
   }
   return strEvents;
 }
 
-/*ŠÔ‚Ì•\¦•ÏX*/
+/*æ™‚é–“ã®è¡¨ç¤ºå¤‰æ›´*/
 function _HHmm(str){
   return Utilities.formatDate(str,'JST','HH:mm');
 }
 
 function postSlackMessage(body) {
   var token = PropertiesService.getScriptProperties().getProperty('SLACK_ACCESS_TOKEN');
-  var bot_name = "Mikubot";
-  var bot_icon = "https://i.imgur.com/3yzyQ9T.jpg";
+  var bot_name = "Mikubot"; //botã®åå‰
+  var bot_icon = "https://i.imgur.com/3yzyQ9T.jpg";  //botã®icon
 
-  var app = SlackApp.create(token); //SlackApp ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+  var app = SlackApp.create(token); //SlackApp ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 
-  var message = ""+ body +"";
+  var message = ''+ body +'';
 
   return app.postMessage("#bot", message, {
     username: bot_name,
