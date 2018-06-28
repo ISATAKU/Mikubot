@@ -3,7 +3,7 @@ function postSlackMessage() {
   var bot_name = "Mikubot";
   var bot_icon = "https://i.imgur.com/3yzyQ9T.jpg"; //icon_URL
 
-  var app = SlackApp.create(token); //SlackApp ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+  var app = SlackApp.create(token); //SlackApp ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 
   // Weather Hacks
 
@@ -14,12 +14,12 @@ function postSlackMessage() {
     }
     var json = JSON.parse(response.getContentText());
 
-    var public = json["publicTime"]; //“V‹Cæ“¾ŠÔ
-    var forecast = json["forecasts"][0]["telop"]; //¡“ú‚Ì“V‹C ”z—ñ‚Åw’è [0]‚ª¡“ú [1]‚ª–¾“ú...
-    var text = json["description"]["text"]; //“V‹CŠT‹µ•¶
+    var public = json["publicTime"]; //å¤©æ°—å–å¾—æ™‚é–“
+    var forecast = json["forecasts"][0]["telop"]; //ä»Šæ—¥ã®å¤©æ°— é…åˆ—ã§æŒ‡å®š [0]ãŒä»Šæ—¥ [1]ãŒæ˜æ—¥...
+    var text = json["description"]["text"]; //å¤©æ°—æ¦‚æ³æ–‡
     var image = json["forecasts"]["image"];
 
-  var message = "¡“ú‚Ì“V‹C‚ÍA[" + forecast + "]‚Í‚±‚ê‚Å‚·B\n  À‹µ•¶ [" + text + "]\n [" + image + "]";
+  var message = "ä»Šæ—¥ã®å¤©æ°—ã¯ã€[" + forecast + "]ã¯ã“ã‚Œã§ã™ã€‚\n  å®Ÿæ³æ–‡ [" + text + "]\n [" + image + "]";
 
   return app.postMessage("#bot", message, {
     username: bot_name,
